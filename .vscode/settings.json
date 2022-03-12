@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "/home/mckay/Documents/weewx/bin"
+    ]
+}
