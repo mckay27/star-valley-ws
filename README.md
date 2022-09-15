@@ -1,4 +1,4 @@
-# star-valley_ws
+# star-valley-ws
 
 This project is a driver for [weewx](weewx.com) that works with RS-485 weather sensors purchased from Aliexpress.
 
