@@ -35,7 +35,10 @@ DS18B20 with id: 0000071c9e1e
 
 ## Pin connections
 
-- DalyBMS
+- DalyBMS 
+    - Gnd: P14
+    - RX: P8 (TX)
+    - TX: P10 (RX)
 
 ## SVWS weewx driver
 
