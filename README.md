@@ -20,6 +20,23 @@ The RS-485 version of [this](https://www.aliexpress.com/item/3256804246014341.ht
 
 [This](https://www.aliexpress.com/item/2251832679343807.html?spm=a2g0o.cart.0.0.5d5538daWXKizm&mp=1) AM2306 sensor, which is a DHT22, is what this driver was written for.
 
+### Soil Temperature sensors
+
+6x DS18B20 with the following ids/depths:
+- 6" - 28-*e6
+- 2' - 28-*cd
+- 4' - 28-*bb
+- 6' - 28-*c2
+- 8' - 28-*d5
+- 10' - 28-*fe
+
+### Interior Temp sensor
+DS18B20 with id: 0000071c9e1e
+
+## Pin connections
+
+- DalyBMS
+
 ## SVWS weewx driver
 
 ### Config Options

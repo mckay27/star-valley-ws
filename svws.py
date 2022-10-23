@@ -9,7 +9,7 @@
 import syslog
 import time
 
-from user.daly_bms import DalyBMS
+from dalybms import DalyBMS
 import adafruit_dht
 from w1thermsensor import W1ThermSensor, Sensor, Unit
 import board
