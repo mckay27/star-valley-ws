@@ -44,7 +44,7 @@ DS18B20 with id: 0000071c9e1e
     - Gnd: P25
     - 3.3V: P17
     - RX: P24 (TX)
-    - TX: P29 (RX)
+    - TX: P21 (RX)
 
 ## SVWS weewx driver
 
