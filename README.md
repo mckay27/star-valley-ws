@@ -40,6 +40,12 @@ DS18B20 with id: 0000071c9e1e
     - RX: P8 (TX)
     - TX: P10 (RX)
 
+- Victron Energy Charge Controller (needs 5V to 3.3V level shifting)
+    - Gnd: P25
+    - 3.3V: P17
+    - RX: P24 (TX)
+    - TX: P29 (RX)
+
 ## SVWS weewx driver
 
 ### Config Options
