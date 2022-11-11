@@ -13,12 +13,38 @@ from dalybms import DalyBMS
 import adafruit_dht
 from w1thermsensor import W1ThermSensor, Sensor, Unit
 import board
+from vedirect import VEDirect
 
 import weewx.drivers
+import weewx.units
 
 DRIVER_NAME = "SVWS"
 DRIVER_VERSION = "0.1"
 
+# Register Units with weewx on loading
+weewx.units.obs_group_dict['bmsVoltage'] = 'group_volt'
+weewx.units.obs_group_dict['bmsCell1Voltage'] = 'group_volt'
+weewx.units.obs_group_dict['bmsCell2Voltage'] = 'group_volt'
+weewx.units.obs_group_dict['bmsCell3Voltage'] = 'group_volt'
+weewx.units.obs_group_dict['bmsCell4Voltage'] = 'group_volt'
+weewx.units.obs_group_dict['bmsCycles'] = 'group_count'
+weewx.units.obs_group_dict['bmsTemp'] = 'group_temperature'
+weewx.units.obs_group_dict['veBatVoltage'] = 'group_volt'
+weewx.units.obs_group_dict['veTotalCurrent'] = 'group_amp'
+weewx.units.obs_group_dict['vePanelVoltage'] = 'group_volt'
+weewx.units.obs_group_dict['vePanelPower'] = 'group_power'
+weewx.units.obs_group_dict['veMode'] = 'group_NONE'
+weewx.units.obs_group_dict['veMPPT'] = 'group_NONE'
+weewx.units.obs_group_dict['veOffReason'] = 'group_NONE'
+weewx.units.obs_group_dict['veError'] = 'group_NONE'
+weewx.units.obs_group_dict['veLoad'] = 'group_boolean'
+weewx.units.obs_group_dict['veLoadCurrent'] = 'group_amp'
+weewx.units.obs_group_dict['veYieldTotal'] = 'group_energy'
+weewx.units.obs_group_dict['veYieldToday'] = 'group_energy'
+weewx.units.obs_group_dict['veYieldYesterday'] = 'group_energy'
+weewx.units.obs_group_dict['veMaxPowerToday'] = 'group_power'
+weewx.units.obs_group_dict['veMaxPowerYesterday'] = 'group_power'
+weewx.units.obs_group_dict['veDaySeqNum'] = 'group_count'
 
 # Loaders
 def loader(config_dict, _):
@@ -31,6 +57,7 @@ DEFAULT_WIND_DIR_PORT = "/dev/ttySC1"
 DEFAULT_WIND_SPEED_PORT = "/dev/ttySC0"
 DEFAULT_RAIN_PORT = "/dev/ttySC0"
 DEFAULT_BMS_PORT ="/dev/ttyAMA0"
+DEFAULT_VEDIRECT_PORT ="/dev/ttyAMA1"
 
 
 # Logging functions
@@ -65,6 +92,8 @@ class SVWSDriver(weewx.drivers.AbstractDevice):
     [Required. Default is board.D17]
     int_temp_id - ID for ds18b20 internal to case
     [Required. Default is 0000071c9e1e]
+    vedirect_port - Serial port for communication with SmartSolar over VE.Direct
+    [Required. Default if /dev/ttyAMA1]
     """
     def __init__(self, **stn_dict):
         # Read configuartion options from stn_dict and apply to self
@@ -74,6 +103,7 @@ class SVWSDriver(weewx.drivers.AbstractDevice):
         self.bms_port = stn_dict.get('bms_port', DEFAULT_BMS_PORT)
         self.dht_pin = stn_dict.get('dht_pin', 17)
         self.int_temp_id = stn_dict.get('int_temp_id', "0000071c9e1e")
+        self.vedirect_port = stn_dict.get('vedirect_port', DEFAULT_VEDIRECT_PORT)
 
         loginf('driver version is %s' % DRIVER_VERSION)
         loginf('using wind_dir port %s' % self.wind_dir_port)
@@ -81,22 +111,26 @@ class SVWSDriver(weewx.drivers.AbstractDevice):
         loginf('using rain port %s' % self.rain_port)
         loginf('using bms port %s' % self.bms_port)
         loginf('using dht data pin %s' % self.dht_pin)
+        loginf('using vedirect port %s' % self.vedirect_port)
 
         # Open RS-485 ports
 
         # Open BMS port
-        # self.bms = DalyBMS(address=8)
-        # try:
-        #     self.bms.connect(self.bms_port)
-        #     logdbg("Successfully connected to bms")
-        # except:
-        #     logerr("Error connecting to bms")
+        self.bms = DalyBMS(address=8)
+        try:
+            self.bms.connect(self.bms_port)
+            logdbg("Successfully connected to bms")
+        except:
+            logerr("Error connecting to bms")
 
         # Create DHT object
         self.dht = adafruit_dht.DHT22(board.D17)
 
         # Create ds18b20 sensor objects
         self.intTemp = W1ThermSensor(sensor_type=Sensor.DS18B20, sensor_id=self.int_temp_id)
+
+        # Create VEDirect reader
+        self.vedirect = VEDirect(self.vedirect_port)
         
 
     def getIntTemp(self):
@@ -128,7 +162,93 @@ class SVWSDriver(weewx.drivers.AbstractDevice):
 
         bmsResult = self.bms.get_soc()
 
-        data["consBatteryVoltage"] = bmsResult.get("total_voltage", None)
+        data["bmsVoltage"] = bmsResult.get("total_voltage", None)
+
+        bmsCellVoltages = bmsResult.get("cell_voltages", None)
+        if bmsCellVoltages is not None:
+            data["bmsCell1Voltage"] = bmsCellVoltages.get("1", None)
+            data["bmsCell2Voltage"] = bmsCellVoltages.get("2", None)
+            data["bmsCell3Voltage"] = bmsCellVoltages.get("3", None)
+            data["bmsCell4Voltage"] = bmsCellVoltages.get("4", None)
+        else:
+            data["bmsCell1Voltage"] = None
+            data["bmsCell2Voltage"] = None
+            data["bmsCell3Voltage"] = None
+            data["bmsCell4Voltage"] = None
+
+        data["bmsCycles"] = bmsResult.get("cycles", None)
+
+        bmsTemp = bmsResult.get("temperatures", None)
+        if bmsTemp is not None:
+            bmsTemp = (bmsTemp * (9 / 5)) + 32
+
+        data["bmsTemp"] = bmsTemp
+
+        return data
+
+    def getVE(self):
+        data = dict()
+
+        packet = self.vedirect.read_data_single()
+
+        batV = packet.get("V", None)
+        if batV is not None:
+            batV = batV * .001
+
+        data["veBatVoltage"] = batV
+
+        totalCur = packet.get("I", None)
+        if totalCur is not None:
+            totalCur = totalCur * .001
+
+        data["veTotalCurrent"] = totalCur
+
+        panV = packet.get("VPV", None)
+        if panV is not None:
+            panV = panV * .001
+
+        data["vePanelVoltage"] = panV
+        data["vePanelPower"] = packet.get("PPV", None)
+        data["veMode"] = VEDirect.device_state_map.get(str(packet.get("CS", None)), None)
+        data["veMPPT"] = VEDirect.trackerModeDecode.get(packet.get("MPPT", None), None)
+        data["veOffReason"] = VEDirect.offReasonDecode.get(packet.get("OR", None), None)
+        data["veError"] = VEDirect.error_codes.get(packet.get("ERR", None), None)
+
+        load = packet.get("LOAD", None)
+        if load is not None:
+            if load == "ON":
+                loadBool = True
+            else:
+                loadBool = False
+
+        data["veLoad"] = loadBool
+
+        loadCur = packet.get("IL", None)
+        if loadCur is not None:
+            loadCur = loadCur * .001
+
+        data["veLoadCurrent"] = loadCur
+
+        yieldTot = packet.get("H19", None)
+        if yieldTot is not None:
+            yieldTot = yieldTot * 10
+
+        data["veYieldTotal"] = yieldTot
+
+        yieldToday = packet.get("H20", None)
+        if yieldToday is not None:
+            yieldToday = yieldToday * 10
+
+        data["veYieldToday"] = yieldToday
+
+        yieldYesterday = packet.get("H22", None)
+        if yieldYesterday is not None:
+            yieldYesterday = yieldYesterday * 10
+
+        data["veYieldYesterday"] = yieldYesterday
+        data["veMaxPowerToday"] = packet.get("H21", None)
+        data["veMaxPowerYesterday"] = packet.get("H23", None)
+        data["veDaySeqNum"] = packet.get("HSDS", None)
 
         return data
 
@@ -146,7 +266,8 @@ class SVWSDriver(weewx.drivers.AbstractDevice):
 
             packet.update(self.getDHT())
             packet.update(self.getIntTemp())
-            # packet.update(self.getBMS())
+            packet.update(self.getBMS())
+            packet.update(self.getVE())
 
             yield packet
 

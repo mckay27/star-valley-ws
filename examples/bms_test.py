@@ -4,12 +4,15 @@
 
 from dalybms import DalyBMS
 import logging
+import pprint
 
 logger = logging.getLogger()
-bms = DalyBMS(address=8, logger=logger )
+bms = DalyBMS(address=8)
 bms.connect(device="/dev/ttyAMA0")
 
 result = bms.get_all()
+result2 = bms.get_cell_voltages()
 
 print("RESULT:")
-print(result)
+pprint.pprint(result)
+pprint.pprint(result2)
