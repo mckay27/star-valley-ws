@@ -22,6 +22,12 @@ DRIVER_NAME = "SVWS"
 DRIVER_VERSION = "0.1"
 
 # Register Units with weewx on loading
+weewx.units.obs_group_dict['soilTemp_6_in'] = 'group_temperature'
+weewx.units.obs_group_dict['soilTemp_2_ft'] = 'group_temperature'
+weewx.units.obs_group_dict['soilTemp_4_ft'] = 'group_temperature'
+weewx.units.obs_group_dict['soilTemp_6_ft'] = 'group_temperature'
+weewx.units.obs_group_dict['soilTemp_8_ft'] = 'group_temperature'
+weewx.units.obs_group_dict['soilTemp_10_ft'] = 'group_temperature'
 weewx.units.obs_group_dict['bmsVoltage'] = 'group_volt'
 weewx.units.obs_group_dict['bmsCell1Voltage'] = 'group_volt'
 weewx.units.obs_group_dict['bmsCell2Voltage'] = 'group_volt'
@@ -45,6 +51,7 @@ weewx.units.obs_group_dict['veYieldYesterday'] = 'group_energy'
 weewx.units.obs_group_dict['veMaxPowerToday'] = 'group_power'
 weewx.units.obs_group_dict['veMaxPowerYesterday'] = 'group_power'
 weewx.units.obs_group_dict['veDaySeqNum'] = 'group_count'
+weewx.units.obs_group_dict['enclosureTemp'] = 'group_temperature'
 
 # Loaders
 def loader(config_dict, _):
@@ -90,7 +97,7 @@ class SVWSDriver(weewx.drivers.AbstractDevice):
     [Required. Default is /dev/ttyAMA0]
     dht_pin - data pin for DHT-22 temp sensor
     [Required. Default is board.D17]
-    int_temp_id - ID for ds18b20 internal to case
+    enc_temp_id - ID for ds18b20 internal to enclosure
     [Required. Default is 0000071c9e1e]
     vedirect_port - Serial port for communication with SmartSolar over VE.Direct
     [Required. Default if /dev/ttyAMA1]
@@ -101,8 +108,9 @@ class SVWSDriver(weewx.drivers.AbstractDevice):
         self.wind_speed_port = stn_dict.get('wind_speed_port', DEFAULT_WIND_SPEED_PORT)
         self.rain_port = stn_dict.get('rain_port', DEFAULT_RAIN_PORT)
         self.bms_port = stn_dict.get('bms_port', DEFAULT_BMS_PORT)
-        self.dht_pin = stn_dict.get('dht_pin', 17)
-        self.int_temp_id = stn_dict.get('int_temp_id', "0000071c9e1e")
+        self.dht_pin = stn_dict.get('dht_pin', board.D17)
+        self.dht_tries = stn_dict.get('dht_tries', 4)
+        self.enc_temp_id = stn_dict.get('int_temp_id', "0000071c9e1e")
         self.vedirect_port = stn_dict.get('vedirect_port', DEFAULT_VEDIRECT_PORT)
 
         loginf('driver version is %s' % DRIVER_VERSION)
@@ -124,36 +132,40 @@ class SVWSDriver(weewx.drivers.AbstractDevice):
             logerr("Error connecting to bms")
 
         # Create DHT object
-        self.dht = adafruit_dht.DHT22(board.D17)
+        self.dht = adafruit_dht.DHT22(self.dht_pin)
 
         # Create ds18b20 sensor objects
-        self.intTemp = W1ThermSensor(sensor_type=Sensor.DS18B20, sensor_id=self.int_temp_id)
+        self.encTemp = W1ThermSensor(sensor_type=Sensor.DS18B20, sensor_id=self.enc_temp_id)
 
         # Create VEDirect reader
         self.vedirect = VEDirect(self.vedirect_port)
         
 
-    def getIntTemp(self):
+    def getEncTemp(self):
         data = dict()
 
-        data["extraTemp1"] = self.intTemp.get_temperature(Unit.DEGREES_F)
+        data["enclosureTemp"] = self.encTemp.get_temperature(Unit.DEGREES_F)
 
         return data
 
 
     def getDHT(self):
         data = dict()
-        try:
-            outTemp = self.dht.temperature * (9 / 5) + 32
-            outHumidity = self.dht.humidity
 
-            data["outTemp"] = outTemp
-            data["outHumidity"] = outHumidity
+        curTry = 0
+        while curTry < self.dht_tries:
+            try:
+                outTemp = self.dht.temperature * (9 / 5) + 32
+                outHumidity = self.dht.humidity
 
-        except RuntimeError:
-            loginf("Runtime error reading DHT22")
-            data["outTemp"] = None
-            data["outHumidity"] = None
+                data["outTemp"] = outTemp
+                data["outHumidity"] = outHumidity
+                break
+
+            except RuntimeError:
+                loginf("Runtime error reading DHT22")
+                data["outTemp"] = None
+                data["outHumidity"] = None
     
         return data
 
@@ -265,7 +277,7 @@ class SVWSDriver(weewx.drivers.AbstractDevice):
                             'usUnits': weewx.US}
 
             packet.update(self.getDHT())
-            packet.update(self.getIntTemp())
+            packet.update(self.getEncTemp())
             packet.update(self.getBMS())
             packet.update(self.getVE())
 
