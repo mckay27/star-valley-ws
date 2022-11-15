@@ -172,25 +172,33 @@ class SVWSDriver(weewx.drivers.AbstractDevice):
     def getBMS(self):
         data = dict()
 
-        bmsResult = self.bms.get_soc()
+        bmsResult = self.bms.get_all()
+        soc = bmsResult.get("soc", None)
 
-        data["bmsVoltage"] = bmsResult.get("total_voltage", None)
+        if soc is not None:
+            data["bmsVoltage"] = soc.get("total_voltage", None)
 
         bmsCellVoltages = bmsResult.get("cell_voltages", None)
         if bmsCellVoltages is not None:
-            data["bmsCell1Voltage"] = bmsCellVoltages.get("1", None)
-            data["bmsCell2Voltage"] = bmsCellVoltages.get("2", None)
-            data["bmsCell3Voltage"] = bmsCellVoltages.get("3", None)
-            data["bmsCell4Voltage"] = bmsCellVoltages.get("4", None)
+            data["bmsCell1Voltage"] = bmsCellVoltages.get(1, None)
+            data["bmsCell2Voltage"] = bmsCellVoltages.get(2, None)
+            data["bmsCell3Voltage"] = bmsCellVoltages.get(3, None)
+            data["bmsCell4Voltage"] = bmsCellVoltages.get(4, None)
         else:
             data["bmsCell1Voltage"] = None
             data["bmsCell2Voltage"] = None
             data["bmsCell3Voltage"] = None
             data["bmsCell4Voltage"] = None
 
-        data["bmsCycles"] = bmsResult.get("cycles", None)
+        status = bmsResult.get("status", None)
 
-        bmsTemp = bmsResult.get("temperatures", None)
+        if status is not None:
+            data["bmsCycles"] = status.get("cycles", None)
+
+        bmsTemps = bmsResult.get("temperatures", None)
+        bmsTemp = None
+        if bmsTemps is not None:
+            bmsTemp = bmsTemps.get(1, None)
         if bmsTemp is not None:
             bmsTemp = (bmsTemp * (9 / 5)) + 32
 
@@ -221,10 +229,10 @@ class SVWSDriver(weewx.drivers.AbstractDevice):
 
         data["vePanelVoltage"] = panV
         data["vePanelPower"] = packet.get("PPV", None)
-        data["veMode"] = VEDirect.device_state_map.get(str(packet.get("CS", None)), None)
-        data["veMPPT"] = VEDirect.trackerModeDecode.get(packet.get("MPPT", None), None)
-        data["veOffReason"] = VEDirect.offReasonDecode.get(packet.get("OR", None), None)
-        data["veError"] = VEDirect.error_codes.get(packet.get("ERR", None), None)
+        data["veMode"] = packet.get("CS", None)
+        data["veMPPT"] = packet.get("MPPT", None)
+        data["veOffReason"] = packet.get("OR", None)
+        data["veError"] = packet.get("ERR", None)
 
         load = packet.get("LOAD", None)
         if load is not None:

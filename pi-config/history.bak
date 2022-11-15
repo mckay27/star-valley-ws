@@ -1,0 +1,1000 @@
+  520  dir
+  521  cd humpherys-weewx/
+  522  dir
+  523  cd examples/
+  524  dir
+  525  ./temp_test.sh
+  526  python3 dht_test.py 
+  527  cd ~/.local/bin
+  528  dir
+  529  rm battery.sh 
+  530  cd ~
+  531  ~/humpherys-weewx/examples/battery.sh 
+  532  python3 ~/humpherys-weewx/examples/dht_test.py 
+  533  ~/humpherys-weewx/examples/temp_test.sh 
+  534  cd Downloads/
+  535  dir
+  536  history | grep mytest
+  537  stressberry-run -n "My Test1" -d 3600 -i 300 -c 4 mytest1.out
+  538  dir
+  539  rm mytest1.out 
+  540  dir
+  541  exit
+  542  ~/humpherys-weewx/examples/temp_test.sh 
+  543  python3 ~/humpherys-weewx/examples/dht_test.py 
+  544  ~/humpherys-weewx/examples/battery.sh 
+  545  exit
+  546  htop
+  547  exit
+  548  cd Downloads/
+  549  stressberry-run -n "My Test1" -d 3600 -i 300 -c 4 mytest1.out
+  550  history
+  551  MPLBACKEND=Agg /home/brian/.local/bin/stressberry-plot mytest1.out -f -d 300 -f -l 400 1600 -t 30 90 -o mytest1.png --not-transparent
+  552  history | grep scp
+  553  scp mytest1.png brian-pc:/home/brian/Downloads/
+  554  dir
+  555  exit
+  556  code /boot/config
+  557  code /boot/config.txt 
+  558  sudo reboot
+  559  ls -alh /dev/watch*
+  560  sudo apt install watchdog
+  561  ls -l /lib/systemd/system
+  562  less /etc/default/watchdog 
+  563  code /etc/watchdog.conf 
+  564  sudo systemctl start watchdog
+  565  sudo systemctl status watchdog
+  566  code /lib/systemd/system/watchdog.service 
+  567  sudo systemctl enable watchdog
+  568  battery.sh
+  569  dir
+  570  history | grep battery
+  571  544!
+  572  ~/humpherys-weewx/examples/battery.sh 
+  573  exit
+  574  ~/humpherys-weewx/examples/battery.sh 
+  575  htop
+  576  exit
+  577  history
+  578  ~/humpherys-weewx/examples/battery.sh 
+  579  cd humpherys-weewx/examples/
+  580  dir
+  581  cat battery.sh 
+  582  daly-bms-cli -d /dev/ttyAMA0 --all
+  583  exit
+  584  history
+  585  daly-bms-cli -d /dev/ttyAMA0 --all
+  586  exit
+  587  history
+  588  ~/humpherys-weewx/examples/battery.sh 
+  589  daly-bms-cli -d /dev/ttyAMA0 --all
+  590  exit
+  591  mHcH@@8291
+  592  history
+  593  daly-bms-cli -d /dev/ttyAMA0 --all
+  594  exit
+  595  history
+  596  daly-bms-cli -d /dev/ttyAMA0 --all
+  597  exit
+  598  daly-bms-cli -d /dev/ttyAMA0 --all
+  599  history
+  600  ~/humpherys-weewx/examples/battery.sh 
+  601  exit
+  602  ~/humpherys-weewx/examples/battery.sh 
+  603  exit
+  604  ~/humpherys-weewx/examples/battery.sh 
+  605  exit
+  606  ~/humpherys-weewx/examples/battery.sh 
+  607  exit
+  608  ~/humpherys-weewx/examples/battery.sh 
+  609  exit
+  610  ~/humpherys-weewx/examples/battery.sh 
+  611  exit
+  612  ~/humpherys-weewx/examples/battery.sh 
+  613  exit
+  614  ~/humpherys-weewx/examples/battery.sh 
+  615  exit
+  616  ~/humpherys-weewx/examples/battery.sh 
+  617  exit
+  618  ~/humpherys-weewx/examples/battery.sh 
+  619  exit
+  620  sudo poweroff
+  621  ~/humpherys-weewx/examples/battery.sh 
+  622  history
+  623  ~/humpherys-weewx/examples/temp_test.sh 
+  624  python3 ~/humpherys-weewx/examples/dht_test.py 
+  625  daly-bms-cli -d /dev/ttyAMA0 --all
+  626  exit
+  627  daly-bms-cli -d /dev/ttyAMA0 --all
+  628  ~/humpherys-weewx/examples/battery.sh 
+  629  python3 ~/humpherys-weewx/examples/dht_test.py 
+  630  ~/humpherys-weewx/examples/temp_test.sh 
+  631  ~/humpherys-weewx/examples/battery.sh 
+  632  sudo reboot
+  633  ~/humpherys-weewx/examples/battery.sh 
+  634  exit
+  635  sudo reboot
+  636  history
+  637  sau
+  638  safu
+  639  ~/humpherys-weewx/examples/battery.sh 
+  640  exit
+  641  sudo poweroff
+  642  ~/humpherys-weewx/examples/temp_test.sh 
+  643  python3 ~/humpherys-weewx/examples/dht_test.py 
+  644  exit
+  645  history | less
+  646  history | grep camera
+  647  history | grep ffmpeg
+  648  libcamera-vid -t 0 --width 1920 --height 1080 --codec libav --libav-format flv -o "rtmp://localhost/cam/stream" &
+  649  htop
+  650  exit
+  651  htop
+  652  exit
+  653  htop
+  654  exit
+  655  history
+  656  cd Downloads/
+  657  dir
+  658  history | grep mytest
+  659  history | less
+  660  stressberry-run -n "My Test3" -d 7200 -i 60 -c 4 mytest3.out
+  661  exit
+  662  who
+  663  dir
+  664  cd Downloads/
+  665  dir
+  666  exit
+  667  who
+  668  logout
+  669  journalctl --help
+  670  journalctl -f -u weewx.service
+  671  journalctl -f -n 50 -u weewx.service
+  672  ls -alh
+  673  cd humpherys-weewx/examples/
+  674  ./battery.sh 
+  675  python ./examples/dht_test.py 
+  676  pip install black
+  677  ./examples/battery.sh 
+  678  who
+  679  history | grep svws.py
+  680  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  681  history | grep wee_report
+  682  sudo wee_reports 
+  683  tail -f /var/log/syslog
+  684  tail --help
+  685  tail -f -n 100 /var/log/syslog
+  686  sudo wee_reports 
+  687  tail -f -n 50 /var/log/syslog
+  688  sudo sytemctl status weewx
+  689  sudo systemctl status weewx
+  690  dmesg
+  691  journalctl -u weewx.service
+  692  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  693  sudo wee_reports 
+  694  tail -f -n 50 /var/log/syslog
+  695  sudo systemctl restart weewx.service 
+  696  sudo pip install adafruit-dht
+  697  sudo systemctl restart weewx
+  698  cd ../Downloads/
+  699  git clone https://github.com/adafruit/Adafruit_Python_DHT.git
+  700  ls -alh
+  701  cd Adafruit_Python_DHT/
+  702  ls -alh
+  703  sudo python3 ./setup.py install
+  704  sudo systemctl restart weewx
+  705  ls -alh
+  706  cd build
+  707  ls -alh
+  708  pip install pigpio-dht
+  709  cd ~/humpherys-weewx/
+  710  python ./examples/dht_gpigo.py 
+  711  sudo apt install pigpio
+  712  python ./examples/dht_gpigo.py 
+  713  sudo pigpiod
+  714  python ./examples/dht_gpigo.py 
+  715  history | grep circuit
+  716  sudo micro /usr/share/weewx
+  717  sudo micro /usr/share/weewx/user/adafruit_dht.py
+  718  sudo systemctl restart weewx
+  719  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  720  sudo systemctl restart weewx
+  721  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  722  sudo systemctl restart weewx
+  723  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  724  sudo systemctl restart weewx
+  725  pip show adafruit_dht
+  726  pip show adafruit-circuitpython-dht
+  727  sudo micro /usr/share/weewx/user/dht22.py
+  728  python ./examples/dht_gpigo.py 
+  729  sudo mv /usr/share/weewx/user/dht22.py /usr/share/weewx/user/DHT22.py
+  730  sudo systemctl restart weewx
+  731  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  732  sudo systemctl restart weewx
+  733  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  734  sudo systemctl restart weewx
+  735  sudo micro /usr/share/weewx/user/pigpio.py
+  736  sudo systemctl restart weewx
+  737  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  738  sudo systemctl restart weewx
+  739  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  740  sudo systemctl restart weewx
+  741  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  742  sudo systemctl restart weewx
+  743  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  744  sudo systemctl restart weewx
+  745  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  746  sudo systemctl restart weewx
+  747  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  748  sudo systemctl restart weewx
+  749  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  750  sudo systemctl restart weewx
+  751  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  752  sudo systemctl restart weewx
+  753  python3 ./examples/dht_pigpio.py
+  754  python3 -m ./examples/dht_pigpio.py
+  755  python3 -m examples.dht_pigpio.py
+  756  python3 -m examples.dht_pigpio
+  757  cd ../Downloads/
+  758  wget https://files.pythonhosted.org/packages/76/29/541a6a22d923fbe0d4cf52f953a2c737370cb717f8df1cbd95ab97fe2fba/Adafruit-Blinka-8.6.0.tar.gz
+  759  sudo rm /usr/share/weewx/user/DHT22.py 
+  760  sudo rm /usr/share/weewx/user/pigpio.py 
+  761  ls -alh
+  762  tar -xf Adafruit-Blinka-8.6.0.tar.gz 
+  763  cd Adafruit-Blinka-8.6.0/
+  764  ls -alh
+  765  cd src
+  766  ls -alh
+  767  cd ..
+  768  sudo cp -R src /usr/share/weewx/user/blinka
+  769  cd ~/humpherys-weewx/
+  770  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  771  sudo systemctl restart weewx
+  772  sudo touch /usr/share/weewx/user/blinka/__init__.py
+  773  sudo systemctl restart weewx
+  774  sudo rm /usr/share/weewx/user/blinka/__init__.py 
+  775  sudo systemctl restart weewx
+  776  sudo cp -R /usr/share/weewx/user/blinka/ /usr/share/weewx/
+  777  sudo systemctl restart weewx
+  778  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  779  sudo systemctl restart weewx
+  780  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  781  sudo systemctl restart weewx
+  782  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  783  sudo systemctl restart weewx
+  784  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  785  sudo systemctl restart weewx
+  786  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  787  sudo systemctl restart weewx
+  788  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  789  sudo systemctl restart weewx
+  790  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  791  sudo systemctl restart weewx
+  792  sudo systemctl reload weewx
+  793  systemctl daemon-reload
+  794  sudo systemctl daemon-reload
+  795  sudo systemctl restart weewx
+  796  sudo systemctl daemon-reload
+  797  sudo systemctl restart weewx
+  798  pip show adafruit-circuitpython-dht
+  799  sudo systemctl restart weewx
+  800  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  801  sudo systemctl restart weewx
+  802  pip install --target=/usr/lib/python3.9 adafruit-circuitpython-dht
+  803  sudo pip install --target=/usr/lib/python3.9 adafruit-circuitpython-dht
+  804  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  805  sudo systemctl restart weewx
+  806  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  807  sudo systemctl restart weewx
+  808  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  809  sudo systemctl restart weewx
+  810  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  811  sudo systemctl restart weewx
+  812  sudo wee_reports 
+  813  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  814  sudo wee_reports 
+  815  sudo systemctl restart weewx
+  816  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  817  sudo systemctl restart weewx
+  818  sudo wee_reports 
+  819  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  820  sudo systemctl restart weewx
+  821  sudo wee_reports 
+  822  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  823  sudo systemctl restart weewx
+  824  wee_config --reconfigure --driver=user.svws
+  825  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  826  sudo systemctl restart weewx
+  827  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  828  sudo systemctl restart weewx
+  829  sudo wee_reports 
+  830  ./examples/battery.sh 
+  831  sudo wee_reports 
+  832  sudo systemctl restart weewx
+  833  sudo wee_reports 
+  834  sudo systemctl restart weewx
+  835  sudo wee_reports 
+  836  sudo systemctl restart weewx
+  837  sudo wee_reports 
+  838  python ./examples/bms_test.py 
+  839  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  840  sudo systemctl restart weewx
+  841  ./examples/temp_test.sh 
+  842  sudo rm /usr/share/weewx/user/adafruit_dht.py 
+  843  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  844  sudo systemctl restart weewx
+  845  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  846  sudo systemctl restart weewx
+  847  history | grep pip
+  848  sudo pip install --target=/usr/lib/python3.9 w1thermsensor
+  849  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  850  sudo systemctl restart weewx
+  851  pip install w1thermsensor
+  852  python
+  853  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  854  sudo systemctl restart weewx
+  855  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  856  sudo systemctl restart weewx
+  857  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  858  sudo systemctl restart weewx
+  859  sudo cp ~/humpherys-weewx/svws.py /usr/share/weewx/user/
+  860  sudo systemctl restart weewx
+  861  sudo wee_reports 
+  862  rm svws.bak.py 
+  863  git add --all
+  864  git commit -m "Got svws driver working with dht22, ds18b20 and battery"
+  865  git config --global user.email "mckaybhumpherys@gmail.com"
+  866  git config --global user.name "McKay Humpherys"
+  867  git commit -m "Got svws driver working with dht22, ds18b20 and battery"
+  868  git push
+  869  cd ..
+  870  git clone git@github.com:mckay27/star-valley-ws.git
+  871  cd .ssh/
+  872  ls -alh
+  873  cat sv-weather_git.pub 
+  874  eval "$(ssh-agent -s)"
+  875  ssh-add ./sv-weather_git
+  876  git clone git@github.com:mckay27/star-valley-ws.git
+  877  ls -alh
+  878  rm -rf star-valley-ws/
+  879  cd ..
+  880  ls -alh
+  881  git clone git@github.com:mckay27/star-valley-ws.git
+  882  cdd star-valley-ws/
+  883  cd star-valley-ws/
+  884  git add --all
+  885  git commit -m "Switched repos"
+  886  git push
+  887  git add README.md 
+  888  git commit -m "Added current config options to readme"
+  889  git push
+  890  git commit -m "Added current config options to readme"
+  891  git add README.md 
+  892  git commit -m "Added current config options to readme"
+  893  git push
+  894  history | grep pip
+  895  sudo pip install --target=/usr/lib/python3.9 dalybms
+  896  sudo rm /usr/share/weewx/user/daly_bms.py 
+  897  sudo systemctl restart weewx
+  898  sudo cp ~/star-valley-ws/svws.py /usr/share/weewx/user/
+  899  sudo systemctl restart weewx
+  900  sudo cp ~/star-valley-ws/svws.py /usr/share/weewx/user/
+  901  sudo systemctl restart weewx
+  902  sudo rm /usr/share/weewx/user/error_codes.py 
+  903  history | grep pip
+  904  sudo cp /etc/weewx/weewx.conf ./weewx-config/
+  905  git rm humws.py 
+  906  git add --all
+  907  git commit -m "Added documentation/backed up weewx.conf"
+  908  git push
+  909  ls /dev/tty*
+  910  less /boot/config.txt 
+  911  git status
+  912  git add README.md 
+  913  git commit -m "add dalybms pin out"
+  914  git push
+  915  journalctl -f -n 50 -u weewx.service
+  916  clear
+  917  cd /usr/share/weewx
+  918  ls -alh
+  919  sudo cp -R blinka/adafruit_blinka/ ./
+  920  sudo cp -R blinka/digitalio.py ./
+  921  ls -alh
+  922  sudo rm adafruit_blinka/
+  923  sudo rm -rf adafruit_blinka/
+  924  sudo rm -rf blinka
+  925  sudo rm -rf digitalio.py 
+  926  cd /usr/lib/systemd/
+  927  ls -alh
+  928  cd system
+  929  ls -alh
+  930  systemctl status weewx
+  931  less /etc/init.d/weewx 
+  932  micro /etc/init.d/weewx
+  933  cd /usr/lib/python3.9
+  934  ls -alh
+  935  history | grep nginx
+  936  sudo micro /etc/nginx/sites-available/default 
+  937  sudo rm -rf /var/www/html/*
+  938  sudo wee_reports 
+  939  cd /var/www/html
+  940  ls -alh
+  941  sudo systemctl restart nginx
+  942  systemctl status nginx.service
+  943  mkdir /var/www/html/stream
+  944  sudo mkdir /var/www/html/stream
+  945  sudo systemctl restart nginx
+  946  systemctl status nginx.service
+  947  history
+  948  ~/humpherys-weewx/examples/battery.sh 
+  949  ~/humpherys-weewx/examples/temp_test.sh 
+  950  python3 ~/humpherys-weewx/examples/dht_test.py 
+  951  history | grep all
+  952  daly-bms-cli -d /dev/ttyAMA0 --all
+  953  exit
+  954  daly-bms-cli -d /dev/ttyAMA0 --all
+  955  exit
+  956  daly-bms-cli -d /dev/ttyAMA0 --all
+  957  exit
+  958  daly-bms-cli
+  959  daly-bms-cli -d /dev/ttyAMA0 --balancing
+  960  daly-bms-cli -d /dev/ttyAMA0 --all
+  961  exit
+  962  daly-bms-cli --balancing
+  963  daly-bms-cli -d /dev/ttyAMA0 --balancing
+  964  exit
+  965  sudo poweroff
+  966  daly-bms-cli -d /dev/ttyAMA0 --balancing
+  967  daly-bms-cli -d /dev/ttyAMA0 --all
+  968  exit
+  969  sau
+  970  safu
+  971  sudo poweroff
+  972  top
+  973  sudo raspi-config
+  974  dir
+  975  cd Downloads/
+  976  dir
+  977  cd ..
+  978  cd humpherys-weewx/
+  979  dir
+  980  journalctl -b
+  981  dir
+  982  cd examples/
+  983  dir
+  984  cd ~
+  985  history
+  986  cd .local/bin
+  987  dir
+  988  ./stressberry-run /?
+  989  history | grep stress
+  990  cd ~/Downloads/
+  991  dir
+  992  stressberry-run -n "My Test5" -d 60 -i 1 -c 4 mytest3.out
+  993  cd /sys/devices/system/cpu/
+  994  dir
+  995  cd cpu0/
+  996  dir
+  997  cd cpufreq
+  998  dir
+  999  cat scaling_cur_freq 
+ 1000  htop
+ 1001  cat scaling_cur_freq 
+ 1002  exit
+ 1003  history
+ 1004  journalctl -b
+ 1005  cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
+ 1006  exit
+ 1007  history
+ 1008  daly-bms-cli -d /dev/ttyAMA0 --all
+ 1009  exit
+ 1010  daly-bms-cli -d /dev/ttyAMA0 --all
+ 1011  history | grep temp
+ 1012  ~/humpherys-weewx/examples/temp_test.sh 
+ 1013  cd humpherys-weewx/examples/
+ 1014  dir
+ 1015  history | grep dht
+ 1016  python3 ~/humpherys-weewx/examples/dht_test.py 
+ 1017  journalctl -u weewx -f
+ 1018  history | grep weewx
+ 1019  sudo systemctl restart weewx
+ 1020  journalctl -u weewx -f
+ 1021  daly-bms-cli -d /dev/ttyAMA0 --all
+ 1022  exit
+ 1023  who
+ 1024  exit
+ 1025  micro /boot/config.txt 
+ 1026  cat /dev/tty*
+ 1027  ls /dev
+ 1028  ls /dev/tty*
+ 1029  sudo shutdown -r now
+ 1030  who
+ 1031  ls /dev/tty*
+ 1032  dmesg
+ 1033  less dmesg
+ 1034  dmesg
+ 1035  dmesg --help
+ 1036  dmesg
+ 1037  less /boot/overlays/README 
+ 1038  sudo micro /boot/config.txt 
+ 1039  sudo shutdown -r now
+ 1040  cd /dev
+ 1041  ls
+ 1042  dir a*
+ 1043  cd tty
+ 1044  dir t*
+ 1045  cat ttyAMA0
+ 1046  cd ~
+ 1047  history
+ 1048  daly-bms-cli -d /dev/ttyAMA0 --all
+ 1049  ls /dev/tty*
+ 1050  dmesg
+ 1051  dmesg | grep uart4
+ 1052  dmesg | grep pin21
+ 1053  dmesg | grep 21
+ 1054  sudo micro /boot/config.txt 
+ 1055  sudo reboot
+ 1056  ls /dev/tty*
+ 1057  man dmesg
+ 1058  dmesg
+ 1059  dmesg | less
+ 1060  dmesg
+ 1061  dmesg | less
+ 1062  history | grep journal
+ 1063  journalctl -u weewx -f
+ 1064  ls /dev/tty*
+ 1065  dmesg
+ 1066  dmesg | grep 21
+ 1067  ls /dev/
+ 1068  ls /dev/tty*
+ 1069  sudo micro /boot/config.txt 
+ 1070  sudo reboot
+ 1071  ls /dev/tty*
+ 1072  dmesg | grep AMA
+ 1073  who
+ 1074  pip install vedirect_m8
+ 1075  ls -alh
+ 1076  cd star-valley-ws/
+ 1077  ls -alh
+ 1078  cd examples/
+ 1079  ls -alh
+ 1080  micro ve_test.py
+ 1081  python ve_test.py 
+ 1082  micro ve_test.py
+ 1083  python ve_test.py 
+ 1084  python DHT22.py 
+ 1085  python dht_pigpio.py 
+ 1086  sudo python ve_test.py 
+ 1087  python vet
+ 1088  python ve_test.py 
+ 1089  micro ve_test.py
+ 1090  python ve_test.py 
+ 1091  micro ve_test.py
+ 1092  python
+ 1093  less ve_test.py 
+ 1094  python
+ 1095  screen /dev/ttyAMA1 19200
+ 1096  top
+ 1097  sudo pip install vedirect_m8
+ 1098  sudo python
+ 1099  pip install vedirect
+ 1100  pip install vedirect-jmfife
+ 1101  python
+ 1102  cd star-valley-ws/examples/
+ 1103  micro ve_test.py 
+ 1104  python ve_test.py 
+ 1105  killall screen
+ 1106  python ve_test.py 
+ 1107  micro ve_test.py 
+ 1108  python ve_test.py 
+ 1109  micro ve_test.py 
+ 1110  python ve_test.py 
+ 1111  screen /dev/ttyAMA0 19200
+ 1112  screen /dev/ttyAMA1 19200
+ 1113  ls /dev/tty*
+ 1114  ls -alh /dev/ttyA*
+ 1115  dmesg | grep AMA
+ 1116  screen /dev/ttyAMA1 19200
+ 1117  python ve_test.py 
+ 1118  screen /dev/ttyAMA1 19200
+ 1119  python ve_test.py 
+ 1120  history | grep screen
+ 1121  python --help
+ 1122  python --version
+ 1123  python ve_test.py 
+ 1124  screen /dev/ttyAMA1 19200
+ 1125  y
+ 1126  yy
+ 1127  y
+ 1128  n
+ 1129  exit
+ 1130  cd ~/star-valley-ws/examples/
+ 1131  python ve_test.py 
+ 1132  dir
+ 1133  cd humpherys-weewx/examples/
+ 1134  dir
+ 1135  ./battery.sh 
+ 1136  cat battery.sh 
+ 1137  micro battery.sh 
+ 1138  ./battery.sh 
+ 1139  cat battery.sh
+ 1140  dir
+ 1141  cd ..
+ 1142  dir
+ 1143  cd star-valley-ws/
+ 1144  dir
+ 1145  cd examples/
+ 1146  dir
+ 1147  cat battery.sh 
+ 1148  python ve_test.py 
+ 1149  who
+ 1150  ping webserver
+ 1151  dir
+ 1152  cat battery.sh 
+ 1153  history
+ 1154  dir
+ 1155  ./battery.sh 
+ 1156  dir
+ 1157  python ve_test.py 
+ 1158  exit
+ 1159  dir
+ 1160  python ~/star-valley-ws/examples/ve_test.py 
+ 1161  dir
+ 1162  python ~/star-valley-ws/examples/ve_test.py 
+ 1163  exit
+ 1164  ~/star-valley-ws/examples/battery.sh
+ 1165  who
+ 1166  man watch
+ 1167  ~/star-valley-ws/examples/battery.sh
+ 1168  watch -n 5 -d ~/star-valley-ws/examples/battery.sh
+ 1169  exit
+ 1170  python ve_test.py 
+ 1171  /bin/python
+ 1172  sudo pip install --target=/usr/lib/python3.9 vedirect-jmfife
+ 1173  daly-bms-cli -d /dev/ttyAMA0 --all
+ 1174  python ./examples/bms_test.py 
+ 1175  python ./examples/ve_test.py 
+ 1176  python ./examples/bms_test.py 
+ 1177  python ./examples/ve_test.py 
+ 1178  history
+ 1179  cd star-valley-ws/
+ 1180  cd ..
+ 1181  python ./star-valley-ws/examples/bms_test.py 
+ 1182  python ./star-valley-ws/examples/ve_test.py 
+ 1183  exit
+ 1184  cd Downloads/
+ 1185  dir
+ 1186  cat ws_data.csv 
+ 1187  dir
+ 1188  cat ws_data.csv 
+ 1189  rm ws_data.csv 
+ 1190  dir
+ 1191  cat ws_data.csv 
+ 1192  dir
+ 1193  rm ws_data.csv 
+ 1194  dir
+ 1195  less ws_data.csv 
+ 1196  dir
+ 1197  less ws_data.csv 
+ 1198  dir
+ 1199  exit
+ 1200  history
+ 1201  python ./star-valley-ws/examples/ve_test.py 
+ 1202  dir
+ 1203  cd star-valley-ws/
+ 1204  dir
+ 1205  cd examples/
+ 1206  dir
+ 1207  cat ve_test.py 
+ 1208  dir
+ 1209  python ./star-valley-ws/examples/ve_test.py 
+ 1210  python /home/brian/star-valley-ws/examples/ve_test.py 
+ 1211  cd ~
+ 1212  dir
+ 1213  cd Downloads/
+ 1214  dir
+ 1215  rm myt*
+ 1216  dir
+ 1217  python /home/brian/star-valley-ws/examples/ve_test.py > ws_data.csv
+ 1218  dir
+ 1219  cat ws_data.csv 
+ 1220  rm ws_data.csv 
+ 1221  dir
+ 1222  python /home/brian/star-valley-ws/examples/ve_test.py > ws_data.csv &
+ 1223  dir
+ 1224  cat ws_data.csv 
+ 1225  cp ws_data.csv foo.csv
+ 1226  dir
+ 1227  cat foo.csf
+ 1228  cat foo.csv
+ 1229  dir
+ 1230  sudo kill 10732
+ 1231  dir
+ 1232  cat ws_data.csv 
+ 1233  dir
+ 1234  rm *.csv
+ 1235  dir
+ 1236  python /home/brian/star-valley-ws/examples/ve_test.py > ws_data.csv
+ 1237  python /home/brian/star-valley-ws/examples/ve_test.py | tee ws_data.csv
+ 1238  python /home/brian/star-valley-ws/examples/ve_test.py > ws_data.csv &
+ 1239  dir
+ 1240  rm ws_data.csv 
+ 1241  history
+ 1242  dir
+ 1243  top
+ 1244  dir
+ 1245  history
+ 1246  exit
+ 1247  history
+ 1248  cd Downloads/
+ 1249  dir
+ 1250  python /home/brian/star-valley-ws/examples/ve_test.py > ws_data.csv &
+ 1251  htop
+ 1252  dir
+ 1253  exit
+ 1254  python ./examples/ve_test.py 
+ 1255  htop
+ 1256  dir
+ 1257  cd Downloads/
+ 1258  dir
+ 1259  history
+ 1260  cd ../star-valley-ws/examples/
+ 1261  dir
+ 1262  pwd
+ 1263  cd ~
+ 1264  python /home/brian/star-valley-ws/examples/battery.sh
+ 1265  cd star-valley-ws/examples/
+ 1266  dir
+ 1267  cat battery.sh 
+ 1268  which daly-bms-cli
+ 1269  cd ~
+ 1270  /home/brian/star-valley-ws/examples/battery.sh
+ 1271  cd Downloads/
+ 1272  dir
+ 1273  exit
+ 1274  ls -al
+ 1275  cd Downloads/
+ 1276  dir
+ 1277  pwd
+ 1278  exit
+ 1279  top
+ 1280  code Makefile
+ 1281  cp --help
+ 1282  make driver
+ 1283  history | grep cp
+ 1284  make driver
+ 1285  make schema
+ 1286  git add --all
+ 1287  git commit -m "Created makefile and backup folder"
+ 1288  git pull
+ 1289  git push
+ 1290  make backup
+ 1291  cd ..
+ 1292  ls -alh
+ 1293  exit
+ 1294  cd Downloads/
+ 1295  dir
+ 1296  mv ws_data.csv ws_data-discharge
+ 1297  dir
+ 1298  history
+ 1299  history | grep ws_data
+ 1300  python /home/brian/star-valley-ws/examples/ve_test.py > ws_data-charge.csv &
+ 1301  dir
+ 1302  history | grep keygen
+ 1303  history | grep ssh
+ 1304  history | grep keygen
+ 1305  dir
+ 1306  exit
+ 1307  cd Downloads/
+ 1308  dir
+ 1309  mv ws_data-discharge ws_data-discharge.csv
+ 1310  dir
+ 1311  exit
+ 1312  git pull
+ 1313  ls -alh ~/.ssh/
+ 1314  eval "$(ssh-agent -s)"
+ 1315  ssh-add ~/.ssh/sv-weather_git
+ 1316  git pull
+ 1317  git add --all
+ 1318  git commit -m "Finialized backup"
+ 1319  git push
+ 1320  top
+ 1321  killall python
+ 1322  cd pi-config/
+ 1323  ls -alh
+ 1324  chmod +w weewx.conf 
+ 1325  sudo chmod +w weewx.conf 
+ 1326  ls -alh
+ 1327  sudo chown brian:brian weewx.conf 
+ 1328  ls -alh
+ 1329  make conf
+ 1330  cd ..
+ 1331  make conf
+ 1332  make driver
+ 1333  make conf
+ 1334  make help
+ 1335  make driver
+ 1336  make schema
+ 1337  wee_database weewx.conf --reconfigure
+ 1338  wee_database --reconfigure
+ 1339  sudo wee_database --reconfigure
+ 1340  make schema
+ 1341  sudo wee_database --reconfigure
+ 1342  sudo wee_database --create
+ 1343  systemctl status weewx.service 
+ 1344  systemctl stop weewx.service 
+ 1345  sudo systemctl stop weewx.service 
+ 1346  sudo wee_database --create
+ 1347  make schema
+ 1348  sudo wee_database --create
+ 1349  sudo wee_database --reconfigure
+ 1350  sudo wee_database --create
+ 1351  make schema
+ 1352  sudo wee_database --create
+ 1353  make schema
+ 1354  sudo wee_database --create
+ 1355  make schema
+ 1356  sudo wee_database --create
+ 1357  ./examples/temp_test.sh 
+ 1358  make driver
+ 1359  sudo systemctl start weewx
+ 1360  systemctl status weewx
+ 1361  python examples/dht_test.py 
+ 1362  sudo shutdown -r now
+ 1363  cd /var/lib/weewx/
+ 1364  ls -alh
+ 1365  sudo rm -rf weewx*
+ 1366  ls -alh
+ 1367  less /etc/weewx/weewx.conf
+ 1368  ls -alh
+ 1369  rm -rf weewx.sdb_new 
+ 1370  sudo rm -rf weewx.sdb_new 
+ 1371  ls -alh
+ 1372  sudo rm -rf weewx.sdb 
+ 1373  ls -alh
+ 1374  sudo rm -rf ./*
+ 1375  systemctl status weewx
+ 1376  journalctl -xe
+ 1377  systemctl status weewx
+ 1378  journalctl -xe
+ 1379  systemctl status weewx
+ 1380  journalctl -xe
+ 1381  cd /etc/weewx/
+ 1382  ls -alh
+ 1383  cd skins/Belchertown/
+ 1384  ls -alh
+ 1385  sudo cp graphs.conf.example graphs.conf
+ 1386  systemctl status weewx
+ 1387  python ./examples/dht_test.py 
+ 1388  systemctl status pigpiod.service 
+ 1389  sudo apt remove pigpio
+ 1390  python ./examples/dht_test.py 
+ 1391  sudo python ./examples/dht_test.py 
+ 1392  systemctl status weewx
+ 1393  sudo systemctl stop weewx
+ 1394  sudo python ./examples/dht_test.py 
+ 1395  sudo systemctl start weewx
+ 1396  make driver
+ 1397  sudo systemctl restart weewx
+ 1398  systemctl status weewx
+ 1399  cd pi-config/
+ 1400  ls -alh
+ 1401  sudo chown brian:brian weewx.conf 
+ 1402  make conf
+ 1403  cd ..
+ 1404  make conf
+ 1405  cd pi-config/
+ 1406  ls -alh
+ 1407  cd ..
+ 1408  make conf
+ 1409  sudo wee_reports 
+ 1410  make backup
+ 1411  make graphs
+ 1412  make skin
+ 1413  sudo wee_reports
+ 1414  make skins
+ 1415  make skin
+ 1416  sudo wee_reports 
+ 1417  make skin
+ 1418  sudo wee_reports 
+ 1419  make skin
+ 1420  sudo wee_reports 
+ 1421  make skin
+ 1422  sudo wee_reports 
+ 1423  make skin
+ 1424  sudo wee_reports 
+ 1425  make conf
+ 1426  sudo wee_reports 
+ 1427  make driver
+ 1428  make conf
+ 1429  sudo wee_reports 
+ 1430  make driver
+ 1431  sudo systemctl restart weewx
+ 1432  make conf
+ 1433  sudo wee_reports
+ 1434  git add --all
+ 1435  git commit -m "Finalized schema and verified driver working in current state"
+ 1436  make backup
+ 1437  git status
+ 1438  git add --all
+ 1439  git commit -m "Backup"
+ 1440  git push
+ 1441  history | grep ssh
+ 1442  eval "$(ssh-agent -s)"
+ 1443  git push
+ 1444  ssh-add ~/.ssh/sv-weather_git
+ 1445  git push
+ 1446  cd ~/star-valley-ws/
+ 1447  make skin
+ 1448  sudo wee_reports 
+ 1449  make skin
+ 1450  sudo wee_reports 
+ 1451  make skin
+ 1452  sudo wee_reports 
+ 1453  cd /usr/lib/python3.9/dalybms
+ 1454  ls -alh
+ 1455  less daly_bms
+ 1456  less daly_bms.py 
+ 1457  journalctl -xe
+ 1458  less daly_bms.py 
+ 1459  journalctl -xe
+ 1460  make driver
+ 1461  sudo systemctl restart weewx
+ 1462  pip list
+ 1463  cd /usr/local/lib/python3.9/
+ 1464  ls -alh
+ 1465  cd dist-packages/
+ 1466  ls -alh
+ 1467  cd ../..
+ 1468  ls -alh
+ 1469  pip install dalybms
+ 1470  cd /usr/lib/python3.9
+ 1471  ls -alh
+ 1472  cd distutils/
+ 1473  ls -alh
+ 1474  cd ..
+ 1475  ls -alh
+ 1476  cd dalybms
+ 1477  ls -alh
+ 1478  cd ~/star-valley-ws/
+ 1479  python examples/bms_test.py 
+ 1480  make skin
+ 1481  sudo wee_reports 
+ 1482  make skin
+ 1483  sudo wee_reports 
+ 1484  python examples/bms_test.py 
+ 1485  make driver
+ 1486  sudo systemctl restart weewx
+ 1487  systemctl status weewx
+ 1488  make driver
+ 1489  sudo systemctl restart weewx
+ 1490  systemctl status weewx
+ 1491  python ./examples/bms_test.py 
+ 1492  make driver
+ 1493  sudo systemctl restart weewx
+ 1494  systemctl status weewx
+ 1495  make driver
+ 1496  sudo systemctl restart weewx
+ 1497  python ./examples/bms_test.py 
+ 1498  make driver
+ 1499  sudo systemctl restart weewx
+ 1500  make skin
+ 1501  sudo systemctl restart weewx
+ 1502  sudo wee_reports 
+ 1503  make skin
+ 1504  sudo wee_reports 
+ 1505  make skin
+ 1506  sudo wee_reports 
+ 1507  python ./examples/bms_test.py 
+ 1508  make driver
+ 1509  sudo systemctl restart weewxz
+ 1510  sudo systemctl restart weewx
+ 1511  make driver
+ 1512  sudo systemctl restart weewx
+ 1513  history
+ 1514  exit
+ 1515  history | grep journal
+ 1516  journalctl -u weewx -f
+ 1517  exit
+ 1518  cd pi-config/
+ 1519  history > history.bak
