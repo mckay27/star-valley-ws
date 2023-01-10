@@ -8,6 +8,10 @@ Installed with: `sudo pip install --target=/usr/lib/python3.9 ...`
 - dalybms
 - vedirect-jmfife
 
+## Install libgpiod
+
+`sudo apt install libgpiod2`
+
 
 ## Modifications to dalybms to support cell voltages
 

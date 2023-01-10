@@ -1,0 +1,4 @@
+adafruit-circuitpython-dht==3.7.7
+w1thermsensor==2.0.0
+dalybms==0.3.0
+vedirect-jmfife==1.0.1

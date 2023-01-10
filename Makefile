@@ -10,7 +10,12 @@ belchertown_conf_path = $(weewx_conf_path)/skins/Belchertown
 backup_path = ./pi-config
 
 help:
-	@echo "Available commands are: backup, driver, schema, and conf"
+	@echo "Available commands are: backup, driver, schema, conf, and skin"
+	@echo "    backup copies files to ./piconfig/"
+	@echo "    driver copies the svws.py driver to the weewx user directory"
+	@echo "    schema copies the svws_schema.py scheam to the weewx user directory"
+	@echo "    conf copies the weewx.conf to the appropriate directory"
+	@echo "    graphs copies the graphs.conf file to the appropriate belchertown directory"
 
 backup: 
 	@echo "Backing up weewx.conf"
@@ -36,8 +41,14 @@ conf: ./pi-config/weewx.conf
 	sudo cp $< $(weewx_conf_path)
 	sudo chown brian:brian $<
 
-skin: ./pi-config/graphs.conf
+graphs: ./pi-config/graphs.conf
 	@echo "Copying $< to $(belchertown_conf_path)"
 	sudo chown root:root $<
 	sudo cp $< $(belchertown_conf_path)
+	sudo chown brian:brian $<
+
+belchertown: ./pi-config/belchertown.py
+	@echo "Copying $< to $(weewx_user_path)"
+	sudo chown root:root $<
+	sudo cp $< $(weewx_user_path)
 	sudo chown brian:brian $<

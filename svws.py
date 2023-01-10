@@ -14,12 +14,14 @@ import adafruit_dht
 from w1thermsensor import W1ThermSensor, Sensor, Unit
 import board
 from vedirect import VEDirect
+import minimalmodbus
+import RPi.GPIO as GPIO
 
 import weewx.drivers
 import weewx.units
 
 DRIVER_NAME = "SVWS"
-DRIVER_VERSION = "0.1"
+DRIVER_VERSION = "0.2"
 
 # Register Units with weewx on loading
 weewx.units.obs_group_dict['soilTemp_6_in'] = 'group_temperature'
@@ -39,10 +41,10 @@ weewx.units.obs_group_dict['veBatVoltage'] = 'group_volt'
 weewx.units.obs_group_dict['veTotalCurrent'] = 'group_amp'
 weewx.units.obs_group_dict['vePanelVoltage'] = 'group_volt'
 weewx.units.obs_group_dict['vePanelPower'] = 'group_power'
-weewx.units.obs_group_dict['veMode'] = 'group_NONE'
-weewx.units.obs_group_dict['veMPPT'] = 'group_NONE'
-weewx.units.obs_group_dict['veOffReason'] = 'group_NONE'
-weewx.units.obs_group_dict['veError'] = 'group_NONE'
+weewx.units.obs_group_dict['veMode'] = 'group_index'
+weewx.units.obs_group_dict['veMPPT'] = 'group_index'
+weewx.units.obs_group_dict['veOffReason'] = 'group_index'
+weewx.units.obs_group_dict['veError'] = 'group_inpip dex'
 weewx.units.obs_group_dict['veLoad'] = 'group_boolean'
 weewx.units.obs_group_dict['veLoadCurrent'] = 'group_amp'
 weewx.units.obs_group_dict['veYieldTotal'] = 'group_energy'
@@ -53,6 +55,14 @@ weewx.units.obs_group_dict['veMaxPowerYesterday'] = 'group_power'
 weewx.units.obs_group_dict['veDaySeqNum'] = 'group_count'
 weewx.units.obs_group_dict['enclosureTemp'] = 'group_temperature'
 
+# Specify new unit group index
+weewx.units.USUnits['group_index'] = 'ind'
+weewx.units.MetricUnits['group_index'] = 'ind'
+weewx.units.MetricWXUnits['group_index'] = 'ind'
+
+weewx.units.default_unit_format_dict['ind'] = '%.0f'
+weewx.units.default_unit_label_dict['ind'] = ' ind'
+
 # Loaders
 def loader(config_dict, _):
     return SVWSDriver(**config_dict[DRIVER_NAME])
@@ -61,11 +71,18 @@ def confeditor_loader():
     return SVWSConfEditor()
 
 DEFAULT_WIND_DIR_PORT = "/dev/ttySC1"
-DEFAULT_WIND_SPEED_PORT = "/dev/ttySC0"
+DEFAULT_WIND_SPEED_PORT = "/dev/ttySC1"
 DEFAULT_RAIN_PORT = "/dev/ttySC0"
+DEFAULT_RS485_TIMEOUT = .1
+
 DEFAULT_BMS_PORT ="/dev/ttyAMA0"
 DEFAULT_VEDIRECT_PORT ="/dev/ttyAMA1"
 
+TXDEN_1 = 27
+TXDEN_2 = 22
+
+TRANSMIT = GPIO.HIGH
+RECV = GPIO.LOW
 
 # Logging functions
 def logmsg(level, msg):
@@ -79,9 +96,6 @@ def loginf(msg):
 
 def logerr(msg):
     logmsg(syslog.LOG_ERR, msg)
-
-
-
 
 
 class SVWSDriver(weewx.drivers.AbstractDevice):
@@ -104,41 +118,101 @@ class SVWSDriver(weewx.drivers.AbstractDevice):
     """
     def __init__(self, **stn_dict):
         # Read configuartion options from stn_dict and apply to self
+        self.wind_dir_addr = stn_dict.get('wind_dir_addr', None)
         self.wind_dir_port = stn_dict.get('wind_dir_port', DEFAULT_WIND_DIR_PORT)
+        self.wind_speed_addr = stn_dict.get('wind_speed_addr', None)
         self.wind_speed_port = stn_dict.get('wind_speed_port', DEFAULT_WIND_SPEED_PORT)
+        self.rain_addr = stn_dict.get('rain_addr', None)
         self.rain_port = stn_dict.get('rain_port', DEFAULT_RAIN_PORT)
-        self.bms_port = stn_dict.get('bms_port', DEFAULT_BMS_PORT)
-        self.dht_pin = stn_dict.get('dht_pin', board.D17)
+        self.rs485_baud = stn_dict.get('rs485_baud', 9600)
+
+        self.bms_port = stn_dict.get('bms_port', None)
+        self.vedirect_port = stn_dict.get('vedirect_port', None)
+
+        self.dht_pin = stn_dict.get('dht_pin', None)
         self.dht_tries = stn_dict.get('dht_tries', 4)
-        self.enc_temp_id = stn_dict.get('int_temp_id', "0000071c9e1e")
-        self.vedirect_port = stn_dict.get('vedirect_port', DEFAULT_VEDIRECT_PORT)
 
-        loginf('driver version is %s' % DRIVER_VERSION)
-        loginf('using wind_dir port %s' % self.wind_dir_port)
-        loginf('using wind_speed port %s' % self.wind_speed_port)
-        loginf('using rain port %s' % self.rain_port)
-        loginf('using bms port %s' % self.bms_port)
-        loginf('using dht data pin %s' % self.dht_pin)
-        loginf('using vedirect port %s' % self.vedirect_port)
+        self.enc_temp_id = stn_dict.get('enc_temp_id', None)
+        self.soil_6_in_id = stn_dict.get('soil_6_in_id', None)
+        self.soil_2_ft_id = stn_dict.get('soil_2_ft_id', None)
+        self.soil_4_ft_id = stn_dict.get('soil_4_ft_id', None)
+        self.soil_6_ft_id = stn_dict.get('soil_6_ft_id', None)
+        self.soil_8_ft_id = stn_dict.get('soil_8_ft_id', None)
+        self.soil_10_ft_id = stn_dict.get('soil_10_ft_id', None)
 
-        # Open RS-485 ports
+
+        loginf(f'Driver Version: {DRIVER_VERSION}')
+        loginf(f'wind_dir_addr: {self.wind_dir_addr}')
+        loginf(f'wind_dir_port: {self.wind_dir_port}')
+        loginf(f'wind_speed_addr: {self.wind_speed_addr}')
+        loginf(f'wind_speed_port: {self.wind_speed_port}')
+        loginf(f'rain_addr: {self.rain_addr}')
+        loginf(f'rain_port: {self.rain_port}')
+        loginf(f'rs485_baud: {self.rs485_baud}')
+        loginf(f'bms_port: {self.bms_port}')
+        loginf(f'vedirect_port: {self.vedirect_port}')
+        loginf(f'dht_pin: {self.dht_pin}')
+        loginf(f'dht_tries: {self.dht_tries}')
+        loginf(f'enc_temp_id: {self.enc_temp_id}')
+        loginf(f'Soil Temp IDs: {self.soil_6_in_id=} {self.soil_2_ft_id=} {self.soil_4_ft_id=} {self.soil_6_ft_id=} {self.soil_8_ft_id=} {self.soil_10_ft_id=}')
+        
+
+        # Open Modbus ports
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(TXDEN_1, GPIO.OUT)
+        GPIO.setup(TXDEN_2, GPIO.OUT)
+        GPIO.output(TXDEN_1, GPIO.LOW)
+        GPIO.output(TXDEN_2, GPIO.LOW)
+
+        if self.rain_addr is not None:
+            self.rain_inst = minimalmodbus.Instrument(self.rain_port, slaveaddress=self.rain_addr)
+            self.rain_inst.baudrate = self.rs485_baud
+            self.rain_inst.timeout = DEFAULT_RS485_TIMEOUT
+
+        if self.wind_dir_addr is not None:
+            self.wind_dir_inst = minimalmodbus.Instrument(self.wind_dir_port, slaveaddress=self.wind_dir_addr)
+            self.wind_dir_inst.baudrate = self.rs485_baud
+            self.wind_dir_inst.timeout = DEFAULT_RS485_TIMEOUT
+
+        if self.wind_speed_addr is not None:
+            self.wind_speed_inst = minimalmodbus.Instrument(self.wind_speed_port, slaveaddress=self.wind_speed_addr)
+            self.wind_speed_inst.baudrate = self.rs485_baud
+            self.wind_speed_inst.timeout = DEFAULT_RS485_TIMEOUT
 
         # Open BMS port
-        self.bms = DalyBMS(address=8)
-        try:
-            self.bms.connect(self.bms_port)
-            logdbg("Successfully connected to bms")
-        except:
-            logerr("Error connecting to bms")
+        if self.bms_port is not None:
+            self.bms = DalyBMS(address=8)
+            try:
+                self.bms.connect(self.bms_port)
+                logdbg("Successfully connected to bms")
+            except:
+                logerr("Error connecting to bms")
 
         # Create DHT object
-        self.dht = adafruit_dht.DHT22(self.dht_pin)
+        if self.dht_pin is not None:
+            self.dht = adafruit_dht.DHT22(self.dht_pin)
 
         # Create ds18b20 sensor objects
-        self.encTemp = W1ThermSensor(sensor_type=Sensor.DS18B20, sensor_id=self.enc_temp_id)
+        if self.enc_temp_id is not None:
+            self.encTemp = W1ThermSensor(sensor_type=Sensor.DS18B20, sensor_id=self.enc_temp_id)
+        if self.soil_6_in_id is not None:
+            self.soil_6_in = W1ThermSensor(sensor_type=Sensor.DS18B20, sensor_id=self.soil_6_in_id)
+        if self.soil_2_ft_id is not None:
+            self.soil_2_ft = W1ThermSensor(sensor_type=Sensor.DS18B20, sensor_id=self.soil_2_ft_id)
+        if self.soil_4_ft_id is not None:
+            self.soil_4_ft = W1ThermSensor(sensor_type=Sensor.DS18B20, sensor_id=self.soil_4_ft_id)
+        if self.soil_6_ft_id is not None:
+            self.soil_6_ft = W1ThermSensor(sensor_type=Sensor.DS18B20, sensor_id=self.soil_6_ft_id)
+        if self.soil_8_ft_id is not None:
+            self.soil_8_ft = W1ThermSensor(sensor_type=Sensor.DS18B20, sensor_id=self.soil_8_ft_id)
+        if self.soil_10_ft_id is not None:
+            self.soil_10_ft = W1ThermSensor(sensor_type=Sensor.DS18B20, sensor_id=self.soil_10_ft_id)
 
         # Create VEDirect reader
-        self.vedirect = VEDirect(self.vedirect_port)
+        if self.vedirect_port is not None:
+            self.vedirect = VEDirect(self.vedirect_port)
         
 
     def getEncTemp(self):
@@ -148,6 +222,47 @@ class SVWSDriver(weewx.drivers.AbstractDevice):
 
         return data
 
+    def getSoilTemp(self):
+        data = dict()
+
+        data["soilTemp_6_in"] = self.soil_6_in.get_temperature(Unit.DEGREES_F)
+        data["soilTemp_2_ft"] = self.soil_2_ft.get_temperature(Unit.DEGREES_F)
+        data["soilTemp_4_ft"] = self.soil_4_ft.get_temperature(Unit.DEGREES_F)
+        data["soilTemp_6_ft"] = self.soil_6_ft.get_temperature(Unit.DEGREES_F)
+        data["soilTemp_8_ft"] = self.soil_8_ft.get_temperature(Unit.DEGREES_F)
+        data["soilTemp_10_ft"] = self.soil_10_ft.get_temperature(Unit.DEGREES_F)
+
+        return data
+
+    def getRain(self):
+        data = dict()
+
+        # Get rain since last packet
+        GPIO.output(TXDEN_1, RECV)
+        data["rain"] = self.rain_inst.read_register(0x00, number_of_decimals=1)
+
+        # Clear rain
+        GPIO.output(TXDEN_1, TRANSMIT)
+        self.rain_inst.write_register(0x00, value=0x5A, functioncode=6)
+
+        return data
+
+    def getWindDir(self):
+        data = dict()
+
+        # Get current wind direction in degrees
+        data["windDir"] = self.wind_dir_inst.read_register(0x0000, number_of_decimals=1, functioncode=0x03)
+
+        return data
+
+    def getWindSpeed(self):
+        data = dict()
+
+        # Get current wind speed in m/s
+        windSpeedMetric = self.wind_speed_inst.read_register(0x0000, number_of_decimals=1, functioncode=0x03)
+        data["windSpeed"] = windSpeedMetric * 2.236936
+
+        return data
 
     def getDHT(self):
         data = dict()
@@ -276,6 +391,9 @@ class SVWSDriver(weewx.drivers.AbstractDevice):
     def hardware_name(self):
         return "SVWS"
 
+    def closePort():
+        pass
+
 
     def genLoopPackets(self):
 
@@ -284,10 +402,22 @@ class SVWSDriver(weewx.drivers.AbstractDevice):
             packet = {'dateTime': int(time.time() + 0.5),
                             'usUnits': weewx.US}
 
-            packet.update(self.getDHT())
-            packet.update(self.getEncTemp())
-            packet.update(self.getBMS())
-            packet.update(self.getVE())
+            if self.dht_pin is not None:
+                packet.update(self.getDHT())
+            if self.rain_addr is not None:
+                packet.update(self.getRain())
+            if self.wind_dir_addr is not None:
+                packet.update(self.getWindDir())
+            if self.wind_speed_addr is not None:
+                packet.update(self.getWindSpeed())
+            if self.enc_temp_id is not None:
+                packet.update(self.getEncTemp())
+            if None not in (self.soil_6_in_id, self.soil_2_ft_id, self.soil_4_ft_id, self.soil_6_ft_id, self.soil_8_ft_id, self.soil_10_ft_id):
+                packet.update(self.getSoilTemp())
+            if self.bms_port is not None:
+                packet.update(self.getBMS())
+            if self.vedirect_port is not None:
+                packet.update(self.getVE())
 
             yield packet
 
