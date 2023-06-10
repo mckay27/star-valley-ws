@@ -235,7 +235,6 @@ class SVWSDriver(weewx.drivers.AbstractDevice):
                 sensor_type=Sensor.DS18B20, sensor_id=self.soil_10_ft_id
             )
 
-
         # Create VEDirect reader
         if self.vedirect_port is not None:
             self.vedirect = VEDirect(self.vedirect_port)
